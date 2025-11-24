@@ -1,0 +1,382 @@
+{
+  "name": "Review AND Weekly Report Agent",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "cb5b7a85-1f6e-4903-b97e-497700458b12",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=you are Agent Assistant For My Food Resturent collecting detail from  google sheet and send review link after visiting 24 hourse {{ $now}}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        416,
+        0
+      ],
+      "id": "f0d1e409-0fed-42c6-b005-90f5905c2ed9",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        400,
+        176
+      ],
+      "id": "09f5b1ce-30c7-41f2-8588-64a8f47f51fd",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "Qj2qgCOlkplL9oWi",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1HR0US3VtQ0qYA46skwgbLjILsd20u-APSaEFsM1-jgI",
+          "mode": "list",
+          "cachedResultName": "CustomerName-VisitDate-VisitTime-Email-PhoneNumber-FoodOrdered-CostUSD",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1HR0US3VtQ0qYA46skwgbLjILsd20u-APSaEFsM1-jgI/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 695582459,
+          "mode": "list",
+          "cachedResultName": "CustomerName-VisitDate-VisitTime-Email-PhoneNumber-FoodOrdered-CostUSD",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1HR0US3VtQ0qYA46skwgbLjILsd20u-APSaEFsM1-jgI/edit#gid=695582459"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        208,
+        0
+      ],
+      "id": "539ca099-d036-4688-885a-bdbc70d5c2d1",
+      "name": "Getting Record",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "OmLXUOoaEDQPg0td",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "demoaniket4@gmail.com",
+        "subject": "Review FeedBack",
+        "emailType": "text",
+        "message": "=Hello [{{ $json['Customer Name'] }}], Thank you for visiting us! We’d love to hear your feedback. Please leave us a Google review: [https://docs.google.com/forms/d/e/1FAIpQLSe7_YtGQ2s9yfhUUlkXsW3OcaNyzfEAZcpx11Gj9yrNz0C1Dw/viewform?usp=header] Best, [Aj Resturent] ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        896,
+        0
+      ],
+      "id": "cd40a6ff-88e4-48b8-a745-86e1d0c08dcb",
+      "name": "Send a message",
+      "webhookId": "557d36ca-2717-4eeb-b64b-8f124d5dc215",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "0EHMR6q7kdEECojP",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        720,
+        0
+      ],
+      "id": "994e61fb-40cc-4c7d-8881-765d27703736",
+      "name": "Wait",
+      "webhookId": "6166296d-c8c4-469e-a9a6-268861555d45"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -48,
+        400
+      ],
+      "id": "eab4c2f8-3734-4180-9c3a-10744aa199b7",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1juM_rUcbn7MmZvrfPTSnby8-Oiz1si8jCKIT_OEWr-E",
+          "mode": "list",
+          "cachedResultName": "Review Form (Responses)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1juM_rUcbn7MmZvrfPTSnby8-Oiz1si8jCKIT_OEWr-E/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 758668660,
+          "mode": "list",
+          "cachedResultName": "Form Responses 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1juM_rUcbn7MmZvrfPTSnby8-Oiz1si8jCKIT_OEWr-E/edit#gid=758668660"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        160,
+        400
+      ],
+      "id": "113f8bbf-abba-4c94-9577-5233813a79e2",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "OmLXUOoaEDQPg0td",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parameters\nconst dateField = 'Visit Date'; // Name of the column containing dates\nconst costField = 'Cost';       // Name of the field for revenue\nconst reviewField = 'Review';   // Optional: name of the review field (if any)\n\n// Helper Functions\nfunction getWeekStart(date) {\n  // Returns the Monday of the week for a given date\n  const d = new Date(date);\n  const day = d.getDay() || 7;\n  if (day !== 1) d.setHours(-24 * (day - 1));\n  d.setHours(0,0,0,0);\n  return d.toISOString().slice(0,10); // return YYYY-MM-DD\n}\n\n// Date ranges\nconst today = new Date();\nconst lastMonday = new Date(today.setDate(today.getDate() - today.getDay() + 1));\nlastMonday.setHours(0,0,0,0);\n// Start of previous week\nconst prevMonday = new Date(lastMonday);\nprevMonday.setDate(prevMonday.getDate() - 7);\n\n// Aggregate by week\nlet thisWeek = { revenue: 0, customers: 0, reviews: 0 };\nlet lastWeek = { revenue: 0, customers: 0, reviews: 0 };\n\nitems.forEach(item => {\n  const visitDate = new Date(item.json[dateField]);\n  if (visitDate >= lastMonday) {\n    thisWeek.revenue += parseFloat(item.json[costField] || 0);\n    thisWeek.customers += 1;\n    if (item.json[reviewField]) thisWeek.reviews += 1;\n  } else if (visitDate >= prevMonday && visitDate < lastMonday) {\n    lastWeek.revenue += parseFloat(item.json[costField] || 0);\n    lastWeek.customers += 1;\n    if (item.json[reviewField]) lastWeek.reviews += 1;\n  }\n});\n\n// Calculations\nfunction pctChange(thisValue, lastValue) {\n  return lastValue === 0 ? '--' : ((thisValue - lastValue) / lastValue * 100).toFixed(2) + '%';\n}\n\nreturn [\n  {\n    json: {\n      \"This Week Revenue\": thisWeek.revenue,\n      \"Last Week Revenue\": lastWeek.revenue,\n      \"Revenue Change\": pctChange(thisWeek.revenue, lastWeek.revenue),\n      \"This Week Customers\": thisWeek.customers,\n      \"Last Week Customers\": lastWeek.customers,\n      \"Customer Change\": pctChange(thisWeek.customers, lastWeek.customers),\n      \"This Week Reviews\": thisWeek.reviews,\n      \"Last Week Reviews\": lastWeek.reviews,\n      \"Reviews Change\": pctChange(thisWeek.reviews, lastWeek.reviews),\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        368,
+        400
+      ],
+      "id": "84005712-fb23-4338-a64a-f18429d466cc",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "sendTo": "demoaniket4@gmail.com",
+        "subject": "Weekly Performance Report",
+        "emailType": "text",
+        "message": "=Dear Team,\n\nThe weekly performance report is ready.\n\nPlease use the following link to view the report:\nhttps://docs.google.com/document/d/{{ $json.id }}/edit\n\nThank you,\nYour Automated Reporting System\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1008,
+        400
+      ],
+      "id": "185b9fbf-9004-4b59-baf4-fd0e2cfc225a",
+      "name": "Send a message1",
+      "webhookId": "408cb48e-7047-4543-854a-3ce46400057b",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "0EHMR6q7kdEECojP",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "html": "<h2>Weekly Performance Report</h2>\n<ul>\n  <li><b>This Week Revenue:</b> {{$json[\"This Week Revenue\"]}}</li>\n  <li><b>Last Week Revenue:</b> {{$json[\"Last Week Revenue\"]}}</li>\n  <li><b>Revenue Change:</b> {{$json[\"Revenue Change\"]}}</li>\n  <li><b>This Week Customers:</b> {{$json[\"This Week Customers\"]}}</li>\n  <li><b>Last Week Customers:</b> {{$json[\"Last Week Customers\"]}}</li>\n  <li><b>Customer Change:</b> {{$json[\"Customer Change\"]}}</li>\n  <li><b>This Week Reviews:</b> {{$json[\"This Week Reviews\"]}}</li>\n  <li><b>Last Week Reviews:</b> {{$json[\"Last Week Reviews\"]}}</li>\n  <li><b>Reviews Change:</b> {{$json[\"Reviews Change\"]}}</li>\n</ul>\n"
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        576,
+        400
+      ],
+      "id": "81212925-b8e8-477a-a2af-95989259ca1d",
+      "name": "HTML"
+    },
+    {
+      "parameters": {
+        "operation": "createFromText",
+        "content": "=Hello \nThis is our report\n\nThis week Revenue: {{ $('Code in JavaScript').item.json['This Week Revenue'] }}\n\n  Last Week Revenue : {{ $('Code in JavaScript').item.json['Last Week Revenue'] }}\n\n Revenue Change : {{ $('Code in JavaScript').item.json['Revenue Change'] }}\n\n This Week Customers: {{ $('Code in JavaScript').item.json['This Week Customers'] }}\n\n Last Week Customers : {{ $('Code in JavaScript').item.json['Last Week Customers'] }}\n\n Customer Change : {{ $('Code in JavaScript').item.json['Customer Change'] }}\n\n This Week Review : {{ $('Code in JavaScript').item.json['This Week Reviews'] }}\n\n Last Week Reviews : {{ $('Code in JavaScript').item.json['Last Week Reviews'] }}\n\n Reviews Change : {{ $('Code in JavaScript').item.json['Reviews Change'] }}",
+        "name": "Weekly Report",
+        "driveId": {
+          "__rl": true,
+          "value": "My Drive",
+          "mode": "list",
+          "cachedResultName": "My Drive",
+          "cachedResultUrl": "https://drive.google.com/drive/my-drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "1kMTLI3kpH_hESCbw7V5sBsKaL8OcynK4",
+          "mode": "list",
+          "cachedResultName": "weakly Report",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1kMTLI3kpH_hESCbw7V5sBsKaL8OcynK4"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        784,
+        400
+      ],
+      "id": "843b08db-53de-492d-bec1-b595c57f3e1e",
+      "name": "Create file from text",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "AhQHXrAXUjXJdlmj",
+          "name": "Google Drive account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Getting Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Getting Record": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML": {
+      "main": [
+        [
+          {
+            "node": "Create file from text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create file from text": {
+      "main": [
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "3182d81c-afbd-4438-b610-be6b0856d20a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "21ffa506762b098762719e613b24dfaf1f9d4d479a3d916b888f664be5116e34"
+  },
+  "id": "nZW7Un8D5IlICLgH",
+  "tags": []
+}
